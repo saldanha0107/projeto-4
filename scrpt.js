@@ -15,12 +15,13 @@ let perguntaAtual;
 let historiaFinal = "";
 
 botaoIniciar.addEventListener('click', iniciaJogo);
+botaoJogarNovamente.addEventListener("click", jogaNovamente);
 
 function iniciaJogo() {
     atual = 0;
     historiaFinal = "";
     telaInicial.style.display = 'none';
-    caixaResultado.style.display = 'none';
+    caixaResultado.classList.remove("mostrar");
     mostraPergunta();
 }
 
@@ -33,41 +34,42 @@ function mostraPergunta() {
     caixaPerguntas.textContent = perguntaAtual.enunciado;
     caixaAlternativas.innerHTML = "";
     mostraAlternativas();
+    caixaPerguntas.classList.add("mostrar");
+    caixaAlternativas.classList.add("mostrar");
 }
 
 function mostraAlternativas() {
     for (const alternativa of perguntaAtual.alternativas) {
-        const botaoAlternativas = document.createElement("button");
-        botaoAlternativas.textContent = alternativa.texto;
-        botaoAlternativas.addEventListener("click", () => respostaSelecionada(alternativa));
-        caixaAlternativas.appendChild(botaoAlternativas);
+        const botao = document.createElement("button");
+        botao.textContent = alternativa.texto;
+        botao.addEventListener("click", () => respostaSelecionada(alternativa));
+        caixaAlternativas.appendChild(botao);
     }
 }
 
 function respostaSelecionada(opcaoSelecionada) {
-    const afirmacoes = aleatorio(opcaoSelecionada.afirmacao);
-    historiaFinal += afirmacoes + " ";
+    const afirmacaoEscolhida = aleatorio(opcaoSelecionada.afirmacao);
+    historiaFinal += afirmacaoEscolhida + " ";
     if (opcaoSelecionada.proxima !== undefined) {
         atual = opcaoSelecionada.proxima;
+        mostraPergunta();
     } else {
         mostraResultado();
-        return;
     }
-    mostraPergunta();
 }
 
 function mostraResultado() {
-    caixaPerguntas.textContent = `Em 2025, ${nome} refletiu sobre o tema:`;
+    caixaPerguntas.classList.remove("mostrar");
+    caixaAlternativas.classList.remove("mostrar");
+    caixaResultado.classList.add("mostrar");
+    caixaPerguntas.textContent = `Em 2049, ${nome}`;
     textoResultado.textContent = historiaFinal;
-    caixaAlternativas.innerHTML = "";
-    caixaResultado.style.display = 'block';
-    botaoJogarNovamente.addEventListener("click", jogaNovamente);
 }
 
 function jogaNovamente() {
     atual = 0;
     historiaFinal = "";
-    caixaResultado.style.display = 'none';
+    caixaResultado.classList.remove("mostrar");
     mostraPergunta();
 }
 
